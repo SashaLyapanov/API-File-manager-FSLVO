@@ -14,15 +14,14 @@ public class ArticleImageUploadService {
     @Value("${article.image.dir}")
     private String uploadDirectory;
 
+    private final String articleImageDir = "articleImage/";
+
     /**
      * Сохранение картинки в дирректорию articleImage
      */
-    public String saveFile(MultipartFile file) throws IOException {
-        String filePath = uploadDirectory + "/" + file.getOriginalFilename();
-        System.out.println(filePath);
-
+    public String saveFile(String fileName, MultipartFile file) throws IOException {
+        String filePath = uploadDirectory + articleImageDir + fileName;
         file.transferTo(new File(filePath));
-
         return filePath;
     }
 
@@ -30,9 +29,8 @@ public class ArticleImageUploadService {
      * Загрузка картинки из дирректорию articleImage
      */
     public byte[] downloadFile(String fileName) throws IOException{
-        String filePath = uploadDirectory + "/" + fileName;
-        byte[] images = Files.readAllBytes(new File(filePath).toPath());
-        return images;
+        String filePath = uploadDirectory + articleImageDir + fileName;
+        return Files.readAllBytes(new File(filePath).toPath());
     }
 
 }

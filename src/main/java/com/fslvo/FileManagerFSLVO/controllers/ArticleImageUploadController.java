@@ -26,11 +26,12 @@ public class ArticleImageUploadController {
      * Сохранение картинок в директорию articleImage
      */
     @PostMapping("upload")
-    public ResponseEntity<?> uploadArticlePictures(@RequestParam String oldFileName, @RequestParam String sportsmanId, @RequestParam MultipartFile file) throws IOException {
-        System.out.println(oldFileName);
-        System.out.println(sportsmanId);
-        String uploadImage = articleImageUploadService.saveFile(file);
-        return ResponseEntity.status(HttpStatus.OK).body(uploadImage);
+    public ResponseEntity<?> uploadArticlePictures(@RequestParam String fileName, @RequestParam MultipartFile file) throws IOException {
+        if (!file.isEmpty()) {
+            String uploadImage = articleImageUploadService.saveFile(fileName, file);
+            return ResponseEntity.status(HttpStatus.OK).body(uploadImage);
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Вы не передали файл для загрузки");
     }
 
     /**
@@ -38,15 +39,19 @@ public class ArticleImageUploadController {
      */
     @GetMapping("download")
     public ResponseEntity<?> downloadArticlePictures(@RequestParam String fileName) throws IOException {
-        byte[] imageData = articleImageUploadService.downloadFile(fileName);
-        HttpHeaders headers = new HttpHeaders();
-        if (fileName.endsWith("jpg")) {
-            headers.setContentType(MediaType.IMAGE_JPEG);
-        } else if (fileName.endsWith("png")) {
-            headers.setContentType(MediaType.IMAGE_PNG);
-        }
+        if (fileName != null) {
+            byte[] imageData = articleImageUploadService.downloadFile(fileName);
+            HttpHeaders headers = new HttpHeaders();
+            if (fileName.endsWith("jpg")) {
+                headers.setContentType(MediaType.IMAGE_JPEG);
+            } else if (fileName.endsWith("png")) {
+                headers.setContentType(MediaType.IMAGE_PNG);
+            }
 
-        return new ResponseEntity<>(imageData, headers, HttpStatus.OK);
+            return new ResponseEntity<>(imageData, headers, HttpStatus.OK);
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Вы не передали название файла для загрузки");
+        }
     }
 
 }
