@@ -26,9 +26,9 @@ public class ArticleImageUploadController {
      * Сохранение картинок в директорию articleImage
      */
     @PostMapping("upload")
-    public ResponseEntity<?> uploadArticlePictures(@RequestParam String fileName, @RequestParam MultipartFile file) throws IOException {
+    public ResponseEntity<?> uploadArticlePictures(@RequestParam String fileName, @RequestParam(required = false) String oldFileName, @RequestParam MultipartFile file) throws IOException {
         if (!file.isEmpty()) {
-            String uploadImage = articleImageUploadService.saveFile(fileName, file);
+            String uploadImage = articleImageUploadService.saveFile(oldFileName, fileName, file);
             return ResponseEntity.status(HttpStatus.OK).body(uploadImage);
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Вы не передали файл для загрузки");

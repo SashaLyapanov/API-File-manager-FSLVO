@@ -19,10 +19,19 @@ public class ArticleImageUploadService {
     /**
      * Сохранение картинки в дирректорию articleImage
      */
-    public String saveFile(String fileName, MultipartFile file) throws IOException {
+    public String saveFile(String oldFileName, String fileName, MultipartFile file) throws IOException {
+        if (oldFileName != null) {
+            File oldFile = new File(uploadDirectory + articleImageDir + oldFileName);
+            if (oldFile.exists()) {
+                oldFile.delete();
+            }
+        }
         String filePath = uploadDirectory + articleImageDir + fileName;
         file.transferTo(new File(filePath));
         return filePath;
+//        String filePath = uploadDirectory + articleImageDir + fileName;
+//        file.transferTo(new File(filePath));
+//        return filePath;
     }
 
     /**
