@@ -47,7 +47,6 @@ public class ArticleImageUploadController {
             } else if (fileName.endsWith("png")) {
                 headers.setContentType(MediaType.IMAGE_PNG);
             }
-
             return new ResponseEntity<>(imageData, headers, HttpStatus.OK);
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Вы не передали название файла для загрузки");
