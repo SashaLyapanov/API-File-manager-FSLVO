@@ -33,7 +33,7 @@ public class AboutFederationService {
         return Files.readAllBytes(new File(filePath).toPath());
     }
 
-    public ResponseEntity<String> uploadFiles(MultipartFile[] files) throws IOException {
+    public ResponseEntity<String> uploadFiles(MultipartFile[] files) {
         try {
             // Очищаем директорию
             cleanDirectory(uploadDirectory);
