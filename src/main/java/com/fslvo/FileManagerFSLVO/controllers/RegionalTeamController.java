@@ -8,8 +8,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
@@ -43,5 +45,16 @@ public class RegionalTeamController {
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Вы не передали название файла для загрузки");
         }
+    }
+
+    @PostMapping(value = "uploadFiles", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> uploadFilesAboutFederation(@RequestParam(name = "files", required = false) MultipartFile[] files) throws IOException {
+        if (files != null) {
+            for (MultipartFile file : files) {
+                System.out.println("Файл: " + file.getOriginalFilename() + ", размер: " + file.getSize());
+            }
+        }
+        ResponseEntity<String> response = regionalTeamService.uploadFiles(files);
+        return response;
     }
 }
