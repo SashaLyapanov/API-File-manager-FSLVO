@@ -26,9 +26,12 @@ public class PersonalAccountController {
      * Сохранение картинок в директорию articleImage
      */
     @PostMapping("upload")
-    public ResponseEntity<?> uploadArticlePictures(@RequestParam String oldFileName, @RequestParam String sportsmanId, @RequestParam MultipartFile file) throws IOException {
-        if (!file.isEmpty()) {
+    public ResponseEntity<?> uploadArticlePictures(@RequestParam(required = false) String oldFileName, @RequestParam String sportsmanId, @RequestParam MultipartFile file) throws IOException {
+        if (!file.isEmpty() && oldFileName != null) {
             String uploadImage = personalAccountService.saveFile(oldFileName, sportsmanId, file);
+            return ResponseEntity.status(HttpStatus.OK).body(uploadImage);
+        } else if (!file.isEmpty()) {
+            String uploadImage = personalAccountService.saveFile(null, sportsmanId, file);
             return ResponseEntity.status(HttpStatus.OK).body(uploadImage);
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Вы не передали файл для загрузки");
