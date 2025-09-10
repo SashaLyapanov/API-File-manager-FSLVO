@@ -46,7 +46,7 @@ public class CompetitionController {
 
 
     @PostMapping("/uploadFiles")
-    public ResponseEntity<?> addFilesToCompetition(@RequestParam String competitionId, @RequestParam(name = "files", required = true) MultipartFile[] files) {
+    public ResponseEntity<?> addFilesToCompetition(@RequestParam String competitionId, @RequestParam(name = "files", required = false) MultipartFile[] files) {
         if (files != null) {
             for (MultipartFile file : files) {
                 System.out.println("Файл: " + file.getOriginalFilename() + ", размер: " + file.getSize());
